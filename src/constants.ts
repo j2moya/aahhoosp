@@ -39,7 +39,7 @@ const MORE_LINKS_DATA = [
 
 export const content: Content = {
   en: {
-    tagline: 'A superior quality of life, within your reach.',
+    tagline: 'An EXCEPTIONAL quality of life, within your reach.',
     heroSubtitle: 'Inclusive events near you to earn extra while helping others to excel. Make it yours now!',
     aboutTitle: 'Our Global Presence',
     aboutText: 'We hold planned events in various cities and countries. Meetings take place at Marriott hotels or similar venues and in Regus offices, with over 3,000 locations available in more than 150 countries, all central, well-located, and secure. These events are scheduled promptly, with availability within the current month.',
@@ -106,7 +106,7 @@ export const content: Content = {
     footerRights: 'All rights reserved',
   },
   es: {
-    tagline: 'Una calidad de vida superior, a tu alcance.',
+    tagline: 'Una calidad de vida EXCEPCIONAL, a tu alcance.',
     heroSubtitle: 'Eventos inclusivos cerca de ti para ganar un extra mientras ayudas a otros a superarse. ¡Hazlo tuyo ahora!',
     aboutTitle: 'Nuestra Presencia Global',
     aboutText: 'Hacemos eventos planificados en otras ciudades y países. Las reuniones se realizan en hoteles Marriott o similares y en oficinas Regus, con más de 3000 oficinas disponibles en más de 150 países, céntricas, bien localizadas y seguras. Estos eventos se planifican de inmediato, con disponibilidad en el mismo mes en curso.',
