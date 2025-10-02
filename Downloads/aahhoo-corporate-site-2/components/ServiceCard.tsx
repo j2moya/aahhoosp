@@ -1,3 +1,4 @@
+// Fix: Replaced placeholder content with component implementation.
 import React, { useState } from 'react';
 import { COMPANY_INFO } from '../constants.ts';
 import type { Service } from '../types.ts';

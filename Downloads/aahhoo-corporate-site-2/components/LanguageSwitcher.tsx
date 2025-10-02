@@ -1,3 +1,4 @@
+// Fix: Replaced placeholder content with component implementation.
 import React from 'react';
 import type { Language } from '../types.ts';
 

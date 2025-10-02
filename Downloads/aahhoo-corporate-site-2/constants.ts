@@ -1,3 +1,4 @@
+// Fix: Replaced placeholder content with actual constants and content definitions.
 import { Content, MexicoLocation } from './types.ts';
 
 export const COMPANY_INFO = {
