@@ -1,0 +1,43 @@
+# Activar la reescritura de URLs
+RewriteEngine On
+
+# Redirección global a HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+# Reenviar todas las solicitudes a index.html para que React maneje el enrutamiento
+# Esto también se encargará de los errores 404 dentro de la aplicación.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.html [L]
+
+# Redirección de directorios antiguos
+Redirect 301 /doc/ https://aahhoo.com/
+Redirect 301 /doc/articulos/ https://aahhoo.com/a/
+Redirect 301 /reels/es/ https://aahhoo.com/r/
+Redirect 301 /reels/en/ https://aahhoo.com/r/
+
+# Proteger acceso a archivos sensibles
+<FilesMatch "^\.(htaccess|htpasswd|env|git|log|bak|zip|sql)$">
+  Order allow,deny
+  Deny from all
+</FilesMatch>
+
+# Desactivar listado de directorios
+Options -Indexes
+
+# Priorizar index.html sobre index.php
+DirectoryIndex index.html index.php
+
+# Expiración de archivos estáticos para velocidad
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/jpg "access plus 30 days"
+  ExpiresByType image/jpeg "access plus 30 days"
+  ExpiresByType image/gif "access plus 30 days"
+  ExpiresByType image/png "access plus 30 days"
+  ExpiresByType text/css "access plus 1 week"
+  ExpiresByType application/javascript "access plus 1 week"
+  ExpiresByType video/mp4 "access plus 1 month"
+</IfModule>
+
