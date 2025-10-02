@@ -1,4 +1,3 @@
-// Fix: Replaced placeholder content with component implementation.
 import React, { useState } from 'react';
 import { COMPANY_INFO } from '../constants.ts';
 import type { Service } from '../types.ts';
@@ -8,7 +7,6 @@ interface ServiceCardProps {
   callToAction: string;
 }
 
-// Fix: Explicitly type ServiceCard as React.FC<ServiceCardProps> to ensure TypeScript recognizes it as a React component that can receive a 'key' prop.
 export const ServiceCard: React.FC<ServiceCardProps> = ({ service, callToAction }) => {
   const [isHovered, setIsHovered] = useState(false);
 
