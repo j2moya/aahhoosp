@@ -26,19 +26,16 @@ export const usePricing = (product: Product, config: PricingConfig): { tier: Use
     if (tier === 'AGENT') {
       totalMarginPercent += agentMargin;
     } else if (tier === 'PROMOTER') {
-      // The user confirmed a summative logic where all margins are added to the price.
-      // For promoters, the final price is the same as the agent's. The commission is handled separately.
-      totalMarginPercent += agentMargin;
+      // CORRECTED LOGIC: All margins and commissions are added for the promoter's final client price.
+      totalMarginPercent += agentMargin + promoterCommission;
     }
     
     const finalPrice = baseCost + (baseCost * (totalMarginPercent / 100));
-    const pvp = baseCost + (baseCost * ((adminMargin + agentMargin + 15) / 100));
+    
+    // PVP is a suggested retail price, set slightly higher than the max possible price for a good "sale" effect.
+    const pvp = baseCost + (baseCost * ((adminMargin + agentMargin + promoterCommission + 15) / 100));
 
-    // Correction on promoter logic: The price for the client is the same as the Agent's.
-    // The commission is a portion of the profit, not an addition to the price.
-    let promoterFinalPrice = baseCost + (baseCost * ((adminMargin + agentMargin) / 100));
-
-    return { finalPrice: tier === 'PROMOTER' ? promoterFinalPrice : finalPrice, pvp };
+    return { finalPrice, pvp };
   }, [product, config, tier]);
 
   return { tier, prices, ref };
