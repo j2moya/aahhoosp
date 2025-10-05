@@ -47,6 +47,10 @@ const ProductCard: React.FC<{ product: Product; appState: AppState; lang: Lang, 
     const whatsAppMessage = lang === 'es'
         ? `Hola, estoy interesado/a en ${product.name.es} que vi a través de un enlace de ${tier}. El ID del producto es ${product.itemId}.`
         : `Hello, I'm interested in ${product.name.en} which I saw through a ${tier} link. The product ID is ${product.itemId}.`;
+    
+    const promoterRecruitmentMessage = lang === 'es'
+        ? `Hola, estoy interesado/a en convertirme en promotor/a para obtener descuentos y comisiones. Mi producto de interés es ${product.name.es}.`
+        : `Hello, I'm interested in becoming a promoter to get discounts and commissions. My product of interest is ${product.name.en}.`;
 
     const customPaypalField = `product:${product.itemId},seller:${ref || 'admin'}`;
     const paypalLink = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=${encodeURIComponent(product.paypalEmail)}&item_name=${encodeURIComponent(product.name[lang])}&item_number=${encodeURIComponent(product.itemId)}&amount=${finalPrice.toFixed(2)}&currency_code=USD&custom=${encodeURIComponent(customPaypalField)}`;
@@ -80,6 +84,17 @@ const ProductCard: React.FC<{ product: Product; appState: AppState; lang: Lang, 
                 <WhatsAppIcon /> {lang === 'es' ? 'Contactar por WhatsApp' : 'Contact via WhatsApp'}
             </a>
             <p className="text-xs text-white/50 mt-4">ItemID: {product.itemId}</p>
+            
+            <div className="mt-6 border-t border-white/20 pt-4 w-full text-center">
+                <a
+                    href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(promoterRecruitmentMessage)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block text-purple-300 font-semibold hover:text-white hover:bg-purple-500/20 py-2 px-4 rounded-lg transition-all text-sm"
+                >
+                    {lang === 'es' ? '✨ ¿Quieres un descuento? ¡Conviértete en Promotor!' : '✨ Want a discount? Become a Promoter!'}
+                </a>
+            </div>
         </div>
     );
 };
