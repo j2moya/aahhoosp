@@ -1,47 +1,40 @@
 import { AppState } from './types';
 
-export const WHATSAPP_NUMBER = "17865644249";
-export const ADMIN_PASSWORD = "DrMoya2025"; // Updated Password
+export const DEFAULT_PRODUCTS = [
+  {
+    id: '1',
+    name: 'Handmade T-Shirt',
+    price: 25.00,
+    description: 'A comfortable, 100% cotton t-shirt with a unique handmade design.',
+    image: 'https://via.placeholder.com/300x300.png?text=T-Shirt'
+  },
+  {
+    id: '2',
+    name: 'Crafted Mug',
+    price: 15.50,
+    description: 'A beautiful ceramic mug, perfect for your morning coffee.',
+    image: 'https://via.placeholder.com/300x300.png?text=Mug'
+  },
+  {
+    id: '3',
+    name: 'Artisan Soap',
+    price: 8.00,
+    description: 'Natural soap made with essential oils.',
+    image: 'https://via.placeholder.com/300x300.png?text=Soap'
+  },
+];
 
 export const DEFAULT_APP_STATE: AppState = {
-  products: [
-    {
-      id: "prod1",
-      name: "Crema para Vitiligo",
-      description: "Tratamiento especializado para la pigmentación de la piel.",
-      baseCost: 45,
-      itemID: "VIT-CREAM-001",
-      paypalBusinessId: "paypal-business-email@example.com",
-      imageUrl: "https://aahhoo.com/assets/img/vitiligo-cream.jpg",
-      videoUrl: "https://aahhoo.com/assets/videos/vitiligo-demo.mp4"
-    },
-    {
-      id: "prod2",
-      name: "Suplemento Energético",
-      description: "Fórmula avanzada para potenciar tu vitalidad diaria.",
-      baseCost: 30,
-      itemID: "ENERGY-SUP-002",
-      paypalBusinessId: "paypal-business-email@example.com",
-      imageUrl: "https://aahhoo.com/assets/img/energy-supplement.jpg",
-      videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-    },
-    {
-        id: "prod3",
-        name: "Kit de Crecimiento Capilar",
-        description: "Solución integral para un cabello más fuerte y saludable.",
-        baseCost: 65,
-        itemID: "HAIR-GROWTH-003",
-        paypalBusinessId: "paypal-business-email@example.com",
-        imageUrl: "https://aahhoo.com/assets/img/hair-growth-kit.jpg",
-        videoUrl: ""
-    }
-  ],
-  config: {
-    brandName: "AAHHOO Corp.",
-    slogan: "resolver problemas, cumplir deseos y crear nuevos futuros.",
-    adminMargin: 20,
-    agentMargin: 20,
-    promoterCommission: 10
+  products: DEFAULT_PRODUCTS,
+  businessDetails: {
+    name: 'My Pop-Up Store',
+    whatsapp: '+1234567890',
+    paypal: 'your-paypal-email@example.com',
   },
-  sellers: []
+  appearance: {
+    primaryColor: '#3498db',
+    font: 'Arial, sans-serif',
+  },
+  title: 'Welcome to My Store!',
+  subtitle: 'Check out our amazing handmade products.',
 };

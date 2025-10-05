@@ -1,37 +1,26 @@
 export interface Product {
   id: string;
   name: string;
+  price: number;
   description: string;
-  baseCost: number;
-  itemID: string;
-  paypalBusinessId: string;
-  imageUrl?: string;
-  videoUrl?: string;
+  image: string;
 }
 
-export interface PricingConfig {
-  brandName: string;
-  slogan: string;
-  adminMargin: number;
-  agentMargin: number;
-  promoterCommission: number;
-}
-
-export interface TieredSeller {
-  id: string;
+export interface BusinessDetails {
   name: string;
-  tier: 'agent' | 'promoter';
+  whatsapp: string;
+  paypal: string;
+}
+
+export interface Appearance {
+  primaryColor: string;
+  font: string;
 }
 
 export interface AppState {
   products: Product[];
-  config: PricingConfig;
-  sellers: TieredSeller[];
-}
-
-export type UserTier = 'PUBLIC' | 'AGENT' | 'PROMOTER';
-
-export interface CalculatedPrices {
-  finalPrice: number;
-  pvp: number;
+  businessDetails: BusinessDetails;
+  appearance: Appearance;
+  title: string;
+  subtitle: string;
 }
