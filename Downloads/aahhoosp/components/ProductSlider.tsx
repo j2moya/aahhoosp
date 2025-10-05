@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Product, AppState, Translations } from '../types';
+import { Product, AppState } from '../types';
 import { usePricing } from '../hooks/usePricing';
 import { WHATSAPP_NUMBER } from '../constants';
 import { ArrowLeftIcon, ArrowRightIcon, ImageIcon, VideoIcon, PayPalIcon, WhatsAppIcon } from './Icons';
@@ -145,7 +145,12 @@ const ProductSlider: React.FC<{ appState: AppState; lang: Lang; }> = ({ appState
                     <ArrowLeftIcon className="w-10 h-10" />
                 </button>
                 
-                <ProductCard product={products[currentIndex]} appState={appState} lang={lang} onShowMedia={handleShowMedia} />
+                {products.length > 0 ? (
+                    <ProductCard product={products[currentIndex]} appState={appState} lang={lang} onShowMedia={handleShowMedia} />
+                ) : (
+                    <div className="text-center text-white">No products available.</div>
+                )}
+
 
                 <button onClick={goToNext} className="absolute right-0 md:right-4 text-white/50 hover:text-white transition-opacity p-4 z-10">
                     <ArrowRightIcon className="w-10 h-10" />

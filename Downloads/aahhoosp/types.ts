@@ -1,26 +1,58 @@
+export interface Translations {
+  [key: string]: string;
+}
+
 export interface Product {
   id: string;
-  name: string;
-  price: number;
-  description: string;
-  image: string;
+  name: {
+    es: string;
+    en: string;
+  };
+  description: {
+    es: string;
+    en: string;
+  };
+  baseCost: number;
+  itemId: string;
+  paypalEmail: string;
+  imageUrl?: string;
+  videoUrl?: string;
 }
 
-export interface BusinessDetails {
-  name: string;
-  whatsapp: string;
-  paypal: string;
+export interface PricingConfig {
+  configVersion: number;
+  adminMargin: number;
+  agentMargin: number;
+  promoterCommission: number;
 }
 
-export interface Appearance {
-  primaryColor: string;
-  font: string;
+export interface BrandConfig {
+  name: string;
+  slogan: {
+    es: string;
+    en: string;
+  };
+}
+
+export interface TieredSeller {
+  id: string;
+  name: string;
+  role: 'Agent' | 'Promoter';
 }
 
 export interface AppState {
+  brand: BrandConfig;
+  pricing: PricingConfig;
   products: Product[];
-  businessDetails: BusinessDetails;
-  appearance: Appearance;
-  title: string;
-  subtitle: string;
+  sellers: TieredSeller[];
 }
+
+export type Tier = 'Admin' | 'Agent' | 'Promoter' | null;
+
+export type PricingResult = {
+  finalPrice: number;
+  pvp: number;
+  tier: Tier;
+  ref: string | null;
+  isStale: boolean;
+};

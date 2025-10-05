@@ -7,7 +7,7 @@ import { ADMIN_PASSWORD } from './constants';
 
 type Lang = 'es' | 'en';
 
-export const DEFAULT_APP_STATE: AppState = {
+const DEFAULT_APP_STATE: AppState = {
   brand: {
     name: 'AAHHOO Corp.',
     slogan: {
@@ -128,6 +128,12 @@ function App() {
     checkHash(); // Initial check
     return () => window.removeEventListener('hashchange', checkHash);
   }, []);
+  
+  // Save state to local storage whenever it changes
+  useEffect(() => {
+    storageService.setItem('appState', appState);
+  }, [appState]);
+
 
   const handleLogin = (password: string) => {
     if (password === ADMIN_PASSWORD) {
@@ -149,7 +155,7 @@ function App() {
         }
     };
     setAppState(stateToSave);
-    storageService.setItem('appState', stateToSave);
+    // The useEffect above will handle saving to localStorage
     alert('Cambios guardados! La nueva versión de configuración es v' + stateToSave.pricing.configVersion);
   };
   

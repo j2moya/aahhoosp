@@ -1,27 +1,36 @@
-
 import { AppState } from '../types';
-import { DEFAULT_APP_STATE } from '../constants';
 
-const STORAGE_KEY = 'aahhoo_pop_up_store_config';
-
-export const saveStateToStorage = (state: AppState): void => {
-  try {
-    const serializedState = JSON.stringify(state);
-    localStorage.setItem(STORAGE_KEY, serializedState);
-  } catch (error) {
-    console.error("Could not save state to local storage", error);
+export const storageService = {
+  getItem<T>(key: string): T | null {
+    try {
+      const item = window.localStorage.getItem(key);
+      return item ? JSON.parse(item) : null;
+    } catch (error) {
+      console.error('Error reading from localStorage', error);
+      return null;
+    }
+  },
+  setItem<T>(key: string, value: T): void {
+    try {
+      const valueToStore = JSON.stringify(value);
+      window.localStorage.setItem(key, valueToStore);
+    } catch (error) {
+      console.error('Error writing to localStorage', error);
+    }
+  },
+  removeItem(key: string): void {
+    try {
+      window.localStorage.removeItem(key);
+    } catch (error) {
+      console.error('Error removing from localStorage', error);
+    }
   }
 };
 
-export const loadStateFromStorage = (): AppState => {
-  try {
-    const serializedState = localStorage.getItem(STORAGE_KEY);
-    if (serializedState === null) {
-      return DEFAULT_APP_STATE;
-    }
-    return JSON.parse(serializedState);
-  } catch (error) {
-    console.error("Could not load state from local storage", error);
-    return DEFAULT_APP_STATE;
-  }
+export const loadState = (): AppState | null => {
+    return storageService.getItem<AppState>('appState');
+};
+
+export const saveState = (state: AppState): void => {
+    storageService.setItem('appState', state);
 };
