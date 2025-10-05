@@ -1,4 +1,3 @@
-
 export interface Product {
   id: string;
   name: string;
@@ -18,9 +17,16 @@ export interface PricingConfig {
   promoterCommission: number;
 }
 
+export interface TieredSeller {
+  id: string;
+  name: string;
+  tier: 'agent' | 'promoter';
+}
+
 export interface AppState {
   products: Product[];
   config: PricingConfig;
+  sellers: TieredSeller[];
 }
 
 export type UserTier = 'PUBLIC' | 'AGENT' | 'PROMOTER';

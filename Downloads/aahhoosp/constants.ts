@@ -1,4 +1,3 @@
-
 import { AppState } from './types';
 
 export const WHATSAPP_NUMBER = "17865644249";
@@ -43,5 +42,6 @@ export const DEFAULT_APP_STATE: AppState = {
     adminMargin: 20,
     agentMargin: 20,
     promoterCommission: 10
-  }
+  },
+  sellers: []
 };

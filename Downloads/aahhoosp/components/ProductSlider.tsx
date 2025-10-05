@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { Product, PricingConfig } from '../types';
 import { usePricing } from '../hooks/usePricing';
@@ -77,7 +76,7 @@ interface ProductSliderProps {
 }
 
 const ProductCard: React.FC<{ product: Product; config: PricingConfig }> = ({ product, config }) => {
-    const { tier, prices } = usePricing(product, config);
+    const { tier, prices, ref } = usePricing(product, config);
     const [modalUrl, setModalUrl] = useState<string | null>(null);
 
     const paypalLink = useMemo(() => {
@@ -90,18 +89,20 @@ const ProductCard: React.FC<{ product: Product; config: PricingConfig }> = ({ pr
             currency_code: 'USD',
             no_shipping: '1',
             lc: 'es_ES',
+            // CRITICAL: This custom field is used for tracking the sale.
+            custom: `${product.itemID}|${ref}` 
         });
         return `https://www.paypal.com/cgi-bin/webscr?${params.toString()}`;
-    }, [product, prices.finalPrice]);
+    }, [product, prices.finalPrice, ref]);
 
     const whatsAppMessage = useMemo(() => {
         let platform = "la plataforma principal";
-        if (tier === 'AGENT') platform = "la plataforma de Agente";
-        if (tier === 'PROMOTER') platform = "la plataforma de Promotor";
+        if (tier === 'AGENT') platform = `la plataforma del Agente (${ref})`;
+        if (tier === 'PROMOTER') platform = `la plataforma del Promotor (${ref})`;
 
         const message = `Hola, estoy interesado/a en el producto "${product.name}". Vengo desde ${platform}. ¿Podrían darme más información? (itemID: ${product.itemID})`;
         return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-    }, [product, tier]);
+    }, [product, tier, ref]);
 
     return (
         <>

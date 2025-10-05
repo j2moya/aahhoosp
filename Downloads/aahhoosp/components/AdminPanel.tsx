@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { AppState, Product, PricingConfig } from '../types';
+import { AppState, Product, PricingConfig, TieredSeller } from '../types';
 
 interface AdminPanelProps {
   initialState: AppState;
@@ -11,10 +10,16 @@ interface AdminPanelProps {
 const AdminPanel: React.FC<AdminPanelProps> = ({ initialState, onSave, onLogout }) => {
   const [config, setConfig] = useState<PricingConfig>(initialState.config);
   const [products, setProducts] = useState<Product[]>(initialState.products);
+  const [sellers, setSellers] = useState<TieredSeller[]>(initialState.sellers || []);
+  
+  const [newSellerName, setNewSellerName] = useState('');
+  const [newSellerTier, setNewSellerTier] = useState<'agent' | 'promoter'>('agent');
+
 
   useEffect(() => {
     setConfig(initialState.config);
     setProducts(initialState.products);
+    setSellers(initialState.sellers || []);
   }, [initialState]);
 
   const handleConfigChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,9 +40,40 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ initialState, onSave, onLogout 
     updatedProducts[index] = productToUpdate;
     setProducts(updatedProducts);
   };
+  
+  const generateSellerId = (name: string, tier: string) => {
+    const sanitizedName = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+    return `${tier.slice(0, 5)}-${sanitizedName}-${Date.now().toString().slice(-4)}`;
+  };
+
+  const handleAddSeller = () => {
+    if (!newSellerName.trim()) {
+      alert('El nombre del vendedor no puede estar vacío.');
+      return;
+    }
+    const newSeller: TieredSeller = {
+      id: generateSellerId(newSellerName, newSellerTier),
+      name: newSellerName.trim(),
+      tier: newSellerTier,
+    };
+    setSellers(prev => [...prev, newSeller]);
+    setNewSellerName('');
+  };
+  
+  const handleDeleteSeller = (id: string) => {
+    if(window.confirm('¿Estás seguro de que quieres eliminar este vendedor?')) {
+        setSellers(prev => prev.filter(seller => seller.id !== id));
+    }
+  };
+
+  const getShareableLink = (seller: TieredSeller) => {
+      const baseUrl = window.location.origin;
+      const param = seller.tier === 'agent' ? 'ref' : 'promoter';
+      return `${baseUrl}/?${param}=${seller.id}`;
+  };
 
   const handleSaveChanges = () => {
-    onSave({ config, products });
+    onSave({ config, products, sellers });
     alert('¡Cambios guardados con éxito!');
   };
 
@@ -90,6 +126,47 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ initialState, onSave, onLogout 
           </div>
         </div>
 
+        {/* Seller Management Section */}
+        <div className="mb-8 p-4 border rounded-lg">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-600">Gestión de Vendedores</h2>
+            <div className="bg-gray-50 p-3 rounded-md mb-4 flex items-center gap-4">
+                <input
+                    type="text"
+                    value={newSellerName}
+                    onChange={(e) => setNewSellerName(e.target.value)}
+                    placeholder="Nombre del nuevo vendedor"
+                    className="flex-grow border border-gray-300 rounded-md shadow-sm py-2 px-3"
+                />
+                <select value={newSellerTier} onChange={(e) => setNewSellerTier(e.target.value as any)} className="border border-gray-300 rounded-md shadow-sm py-2 px-3">
+                    <option value="agent">Agente</option>
+                    <option value="promoter">Promotor</option>
+                </select>
+                <button onClick={handleAddSeller} className="bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700 transition">
+                    Añadir
+                </button>
+            </div>
+            <div className="space-y-3">
+                {sellers.map((seller) => (
+                    <div key={seller.id} className="p-3 border rounded-md bg-white flex justify-between items-center">
+                        <div>
+                            <p className="font-bold">{seller.name} <span className="text-xs font-normal bg-blue-100 text-blue-800 px-2 py-1 rounded-full">{seller.tier === 'agent' ? 'Agente' : 'Promotor'}</span></p>
+                            <input
+                                type="text"
+                                readOnly
+                                value={getShareableLink(seller)}
+                                className="text-sm text-gray-600 bg-gray-100 p-1 rounded w-full mt-1"
+                                onFocus={(e) => e.target.select()}
+                            />
+                        </div>
+                        <button onClick={() => handleDeleteSeller(seller.id)} className="text-red-500 hover:text-red-700 font-semibold">
+                            Eliminar
+                        </button>
+                    </div>
+                ))}
+                 {sellers.length === 0 && <p className="text-center text-gray-500">No hay vendedores registrados.</p>}
+            </div>
+        </div>
+        
         {/* Products Section */}
         <div>
           <h2 className="text-2xl font-semibold mb-4 text-gray-600">Productos</h2>
