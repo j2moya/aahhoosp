@@ -13,7 +13,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ initialState, onSave, onLogout 
   const [sellers, setSellers] = useState<TieredSeller[]>(initialState.sellers || []);
   
   const [newSellerName, setNewSellerName] = useState('');
-  const [newSellerTier, setNewSellerTier] = useState<'agent' | 'promoter'>('agent');
+  const [newSellerTier, setNewSellerTier] = useState<'agent' | 'promoter'>('promoter');
+  const [copiedSellerId, setCopiedSellerId] = useState<string | null>(null);
 
 
   useEffect(() => {
@@ -43,7 +44,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ initialState, onSave, onLogout 
   
   const generateSellerId = (name: string, tier: string) => {
     const sanitizedName = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-    return `${tier.slice(0, 5)}-${sanitizedName}-${Date.now().toString().slice(-4)}`;
+    return `${tier.slice(0, 5)}-${sanitizedName}-${Math.floor(1000 + Math.random() * 9000)}`;
   };
 
   const handleAddSeller = () => {
@@ -70,6 +71,16 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ initialState, onSave, onLogout 
       const baseUrl = window.location.origin;
       const param = seller.tier === 'agent' ? 'ref' : 'promoter';
       return `${baseUrl}/?${param}=${seller.id}`;
+  };
+
+  const handleCopyLink = (link: string, sellerId: string) => {
+    navigator.clipboard.writeText(link).then(() => {
+        setCopiedSellerId(sellerId);
+        setTimeout(() => setCopiedSellerId(null), 2000);
+    }).catch(err => {
+        console.error('Failed to copy text: ', err);
+        alert('No se pudo copiar el enlace.');
+    });
   };
 
   const handleSaveChanges = () => {
@@ -138,8 +149,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ initialState, onSave, onLogout 
                     className="flex-grow border border-gray-300 rounded-md shadow-sm py-2 px-3"
                 />
                 <select value={newSellerTier} onChange={(e) => setNewSellerTier(e.target.value as any)} className="border border-gray-300 rounded-md shadow-sm py-2 px-3">
-                    <option value="agent">Agente</option>
                     <option value="promoter">Promotor</option>
+                    <option value="agent">Agente</option>
                 </select>
                 <button onClick={handleAddSeller} className="bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700 transition">
                     Añadir
@@ -147,18 +158,26 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ initialState, onSave, onLogout 
             </div>
             <div className="space-y-3">
                 {sellers.map((seller) => (
-                    <div key={seller.id} className="p-3 border rounded-md bg-white flex justify-between items-center">
+                    <div key={seller.id} className="p-3 border rounded-md bg-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                         <div>
                             <p className="font-bold">{seller.name} <span className="text-xs font-normal bg-blue-100 text-blue-800 px-2 py-1 rounded-full">{seller.tier === 'agent' ? 'Agente' : 'Promotor'}</span></p>
-                            <input
-                                type="text"
-                                readOnly
-                                value={getShareableLink(seller)}
-                                className="text-sm text-gray-600 bg-gray-100 p-1 rounded w-full mt-1"
-                                onFocus={(e) => e.target.select()}
-                            />
+                            <div className="flex items-center gap-2 mt-1 w-full max-w-sm">
+                                <input
+                                    type="text"
+                                    readOnly
+                                    value={getShareableLink(seller)}
+                                    className="text-sm text-gray-600 bg-gray-100 p-1 rounded w-full flex-grow"
+                                    onFocus={(e) => e.target.select()}
+                                />
+                                <button 
+                                    onClick={() => handleCopyLink(getShareableLink(seller), seller.id)}
+                                    className="text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-1 px-2 rounded transition-colors flex-shrink-0"
+                                >
+                                    {copiedSellerId === seller.id ? 'Copiado!' : 'Copiar'}
+                                </button>
+                            </div>
                         </div>
-                        <button onClick={() => handleDeleteSeller(seller.id)} className="text-red-500 hover:text-red-700 font-semibold">
+                        <button onClick={() => handleDeleteSeller(seller.id)} className="text-red-500 hover:text-red-700 font-semibold self-end sm:self-center">
                             Eliminar
                         </button>
                     </div>
